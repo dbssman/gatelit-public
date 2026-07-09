@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gatelit — Ship prompts with confidence</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-6">
+
+<main class="max-w-xl w-full space-y-10">
+  <!-- header -->
+  <div class="space-y-4">
+    <h1 class="text-4xl font-bold tracking-tight">
+      Ship prompts with <span class="text-brand-500">confidence</span>
+    </h1>
+    <p class="text-lg text-zinc-400 leading-relaxed">
+      Gatelit is an AI gateway with standardized output schemas, versioned prompts,
+      and regression testing. Define your output shape once — run it on any model.
+    </p>
+  </div>
+
+  <!-- features -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+      <p class="text-sm font-medium text-zinc-100">Prompt versions</p>
+      <p class="text-xs text-zinc-500 mt-1">Edit, rollback, A/B test. Prompts as code.</p>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+      <p class="text-sm font-medium text-zinc-100">Standardized schemas</p>
+      <p class="text-xs text-zinc-500 mt-1">Define output once. Runs on any model. Fallbacks just work.</p>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+      <p class="text-sm font-medium text-zinc-100">Regression tests</p>
+      <p class="text-xs text-zinc-500 mt-1">Run prompts against scenarios. Know what broke.</p>
+    </div>
+  </div>
+
+  <!-- waitlist -->
+  <form
+    id="waitlist-form"
+    class="space-y-4"
+    onsubmit="handleSubmit(event)"
+  >
+    <div>
+      <label for="email" class="block text-sm font-medium text-zinc-300 mb-1.5">
+        Join the waitlist
+      </label>
+      <div class="flex gap-3">
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="you@example.com"
+          class="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+        />
+        <button
+          type="submit"
+          id="submit-btn"
+          class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-lg text-sm transition-colors disabled:opacity-50"
+        >
+          Get early access
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-zinc-400">
+        What do you use for prompt management today?
+      </label>
+      <div class="grid grid-cols-2 gap-2">
+        <label class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 cursor-pointer hover:border-zinc-700">
+          <input type="checkbox" name="current" value="portkey" class="rounded bg-zinc-800 border-zinc-700 text-brand-600 focus:ring-brand-500" />
+          <span class="text-sm text-zinc-300">Portkey</span>
+        </label>
+        <label class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 cursor-pointer hover:border-zinc-700">
+          <input type="checkbox" name="current" value="langfuse" class="rounded bg-zinc-800 border-zinc-700 text-brand-600 focus:ring-brand-500" />
+          <span class="text-sm text-zinc-300">Langfuse</span>
+        </label>
+        <label class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 cursor-pointer hover:border-zinc-700">
+          <input type="checkbox" name="current" value="litellm" class="rounded bg-zinc-800 border-zinc-700 text-brand-600 focus:ring-brand-500" />
+          <span class="text-sm text-zinc-300">LiteLLM</span>
+        </label>
+        <label class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 cursor-pointer hover:border-zinc-700">
+          <input type="checkbox" name="current" value="in-house" class="rounded bg-zinc-800 border-zinc-700 text-brand-600 focus:ring-brand-500" />
+          <span class="text-sm text-zinc-300">In-house / nothing</span>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <label for="use-case" class="block text-sm font-medium text-zinc-400 mb-1.5">
+        What's your primary use case? <span class="text-zinc-600">(optional)</span>
+      </label>
+      <textarea
+        id="use-case"
+        name="use-case"
+        rows="2"
+        placeholder="e.g. running LLM evals, managing prompts for a customer-facing chatbot, routing across providers..."
+        class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 resize-none"
+      ></textarea>
+     </div>
+  </form>
+
+  <p id="success-msg" class="hidden text-sm text-brand-400 font-medium">
+      You're on the list. We'll reach out as spots open up.
+  </p>
+  <p id="error-msg" class="hidden text-sm text-red-400 font-medium">
+      Something went wrong. <a href="https://github.com/dbssman/gatelit-public/issues" class="underline hover:text-red-300">Open an issue</a> or try again.
+  </p>
+
+  <!-- footer -->
+  <div class="flex items-center justify-between text-xs text-zinc-600 pt-4 border-t border-zinc-800">
+    <a href="https://github.com/dbssman/gatelit-public" class="hover:text-zinc-400 transition-colors">GitHub</a>
+  </div>
+</main>
+
+<script>
+  const FORM_URL = "/api/waitlist"
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const btn = document.getElementById("submit-btn")
+    const success = document.getElementById("success-msg")
+    const error = document.getElementById("error-msg")
+
+    btn.disabled = true
+    btn.textContent = "Submitting..."
+
+    const form = e.target
+    const data = {
+      email: form.email.value,
+      current: [...form.querySelectorAll('input[name="current"]:checked')].map(c => c.value),
+      useCase: form["use-case"].value,
+    }
+
+    try {
+      const res = await fetch(FORM_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+
+      if (res.ok) {
+        success.classList.remove("hidden")
+        form.classList.add("hidden")
+      } else {
+        error.classList.remove("hidden")
+      }
+    } catch {
+      error.classList.remove("hidden")
+    } finally {
+      btn.disabled = false
+      btn.textContent = "Get early access"
+    }
+  }
+</script>
+
+</body>
+</html>
